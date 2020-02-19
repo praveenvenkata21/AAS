@@ -10,6 +10,7 @@ import time
 import datetime
 userent=rolent=nament=''
 pasent=clr=clr1=clr2=clr3=lab=r=n=0
+clgname="SAI TIRUMALA NVR ENGINEERING COLLEGE"
 def verify():
     global r,n
     r=rolent.get()
@@ -18,8 +19,8 @@ def verify():
     if len(r)==10 and len(n)>=1:
         #print("10")
         msg.showinfo("info","Verification Successfull")
-        enr=t.Button(home,text="ENROLL FACE",command=enroll)
-        enr.place(x=20,y=200)
+        enr=t.Button(home,text="ENROLL FACE",command=enroll,bg='plum1',height=2)
+        enr.place(x=100,y=320)
     elif len(n)== 0:
         msg.showwarning("warning","Please enter your name")
     else:        
@@ -79,6 +80,7 @@ def getImagesAndLabels(path):
     for imagePath in imagePaths:
         #loading the image and converting it to gray scale
         pilImage=Image.open(imagePath).convert('L')
+        w
         #Now we are converting the PIL image into numpy array
         imageNp=np.array(pilImage,'uint8')
         #getting the Id from the image
@@ -106,6 +108,7 @@ def clear3():
     nament.delete(first=0,last=len(nament.get()))
     
 def track():
+    global attendance
     recognizer = cv2.face_LBPHFaceRecognizer.create()
     recognizer.read("TrainingImageLabel\Trainner.yml")
     harcascadePath = "haarcascade_frontalface_default.xml"
@@ -123,7 +126,7 @@ def track():
             cv2.rectangle(im,(x,y),(x+w,y+h),(225,0,0),2)
             Id, conf = recognizer.predict(gray[y:y+h,x:x+w])
             print(conf)                                   
-            if(conf < 50):
+            if(conf < 75):
                 ts = time.time()      
                 date = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
                 timeStamp = datetime.datetime.fromtimestamp(ts).strftime('%H:%M:%S')
@@ -140,7 +143,7 @@ def track():
             cv2.putText(im,str(tt),(x,y+h), font, 1,(255,255,255),2)        
         attendance=attendance.drop_duplicates(subset=['Id'],keep='first')    
         cv2.imshow('im',im) 
-        if (cv2.waitKey(1)==ord('q')):
+        if (cv2.waitKey(20)==ord('q')):
             break
     ts = time.time()      
     date = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
@@ -150,46 +153,50 @@ def track():
     attendance.to_csv(fileName,index=False)
     cam.release()
     cv2.destroyAllWindows()
-    #print(attendance)
+    print(attendance)
     #res=attendance
     #msg.showinfo("info",res)
 def register():
     global rolent,nament,home
     home=t.Tk()
     home.title("REGISTRATION")
-    home.geometry('800x700')
-    roll=t.Label(home,text="ROLL NUMBER")
-    name=t.Label(home,text="NAME")
-    rolent=t.Entry(home,width=20)
-    nament=t.Entry(home,width=20)
-    clr2=t.Button(home,text="CLEAR",command=clear2)
-    clr3=t.Button(home,text="CLEAR",command=clear3)
+    home.geometry('700x500')
+    home.configure(bg='plum1')
+    roll=t.Label(home,text="ROLL NUMBER",width=15,height=2,bg='plum1',font='Arial 12')
+    name=t.Label(home,text="NAME",width=15,height=2,bg='plum1',font='Arial 12')
+    rolent=t.Entry(home,width=20,font='Arial 16')
+    nament=t.Entry(home,width=20,font='Arial 16')
+    clr2=t.Button(home,text="CLEAR",command=clear2,width=10,height=2,bg='plum1')
+    clr3=t.Button(home,text="CLEAR",command=clear3,width=10,height=2,bg='plum1')
     #enr=t.Button(home,text="ENROLL FACE",command=enroll)
     #enr.place(x=20,y=200)    
-    ver=t.Button(home,text="VERIFY",command=verify)    
-    tra=t.Button(home,text="TRAIN FACES",command=train)
+    ver=t.Button(home,text="VERIFY",command=verify,width=10,height=2,bg='plum1')    
+    tra=t.Button(home,text="TRAIN FACES",command=train,width=10,height=2,bg='plum1')
     #sub=t.Button(home,text="SUBMIT",command=submit)
-    roll.place(x=10,y=50)
-    name.place(x=10,y=80)
-    rolent.place(x=100,y=50)
-    nament.place(x=100,y=80)
-    clr2.place(x=250,y=50)
-    clr3.place(x=250,y=80)
-    ver.place(x=100,y=120)
+    roll.place(x=80,y=150)
+    name.place(x=80,y=200)
+    rolent.place(x=230,y=150)
+    nament.place(x=230,y=200)
+    clr2.place(x=510,y=150)
+    clr3.place(x=510,y=200)
+    ver.place(x=330,y=320)
     
-    tra.place(x=120,y=200)
+    tra.place(x=230,y=320)
     #sub.place(x=220,y=200)
 def attendance():
     home=t.Tk()
     home.title("ATTENDANCE")
-    home.geometry('800x700')
+    home.geometry('700x500')
     tra=t.Button(home,text="TRACK ATTENDANCE",command=track)
-    tra.place(x=100,y=600)   
+    tra.place(x=200,y=400)  
+    #lab=t.Button(home,text=att1)
+    #lab.place(x=100,y=100)
 
 def homescreen():
     home=t.Tk()
     home.title("HOME SCREEN")
-    home.geometry('800x700')
+    home.geometry('500x250')
+    home.configure(bg='pink')
     reg=t.Button(home,text="REGISTER",command=register)
     att=t.Button(home,text="ATTENDANCE",command=attendance)
     reg.place(x=120,y=75)
@@ -216,17 +223,22 @@ def login1():
 
 login=t.Tk()
 login.title("LOGIN")
-login.geometry('400x150')
-user=t.Label(login,text="ENTER USERNAME")
-pas=t.Label(login,text="ENTER PASSWORD")
-clr=t.Button(login,text="CLEAR",command=clear1).place(x=250,y=80)
-clr1=t.Button(login,text="CLEAR",command=clear).place(x=250,y=50)
-userent=t.Entry(login,width=20)
-pasent=t.Entry(login,width=20,show='*')
-sub=t.Button(login,text="SUBMIT",command=login1)
-user.place(x=10,y=50)
-pas.place(x=10,y=80)
-userent.place(x=120,y=50)
-pasent.place(x=120,y=80)
-sub.place(x=50,y=120)
+login.geometry('500x300')
+login.configure(bg='lightslateblue')
+user=t.Label(login,text="USERNAME",height=1,width=17)
+pas=t.Label(login,text="PASSWORD",height=1,width=17)
+clg=t.Label(login,text=clgname,height=2,width=50,font='BOLD',bg='lightslateblue')
+clr=t.Button(login,text="CLEAR",height=1,width=10,command=clear1)
+clr.place(x=350,y=120)
+clr1=t.Button(login,text="CLEAR",height=1,width=10,command=clear)
+clr1.place(x=350,y=70)
+userent=t.Entry(login,width=15,font='Roman')
+pasent=t.Entry(login,width=15,show='*',font='Roman')
+sub=t.Button(login,text="SUBMIT",command=login1,width=10,height=1)
+user.place(x=15,y=70)
+pas.place(x=15,y=120)
+userent.place(x=180,y=70)
+pasent.place(x=180,y=120)
+sub.place(x=210,y=180)
+clg.place(x=-30,y=250)
 login.mainloop()
