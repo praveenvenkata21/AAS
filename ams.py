@@ -14,13 +14,11 @@ clgname="SAI TIRUMALA NVR ENGINEERING COLLEGE"
 def verify():
     global r,n
     r=rolent.get()
-    n=nament.get()
-    
+    n=nament.get()    
     if len(r)==10 and len(n)>=1:
-        #print("10")
         msg.showinfo("info","Verification Successfull")
-        enr=t.Button(home,text="ENROLL FACE",command=enroll,bg='plum1',height=2)
-        enr.place(x=100,y=320)
+        enr=t.Button(home,text="ENROLL FACE",command=enroll,bg='snow',height=2)
+        enr.place(x=230,y=320)
     elif len(n)== 0:
         msg.showwarning("warning","Please enter your name")
     else:        
@@ -55,8 +53,6 @@ def enroll():
         csvFile.close()
         msg.showinfo("Registered Successfully","Name:"+n+"\nRoll NUmber:"+r)
         
-    
-
 def train():
     recognizer = cv2.face_LBPHFaceRecognizer.create()#recognizer = cv2.face.LBPHFaceRecognizer_create()#$cv2.createLBPHFaceRecognizer()
     harcascadePath = "haarcascade_frontalface_default.xml"
@@ -67,11 +63,9 @@ def train():
     res = "Image Trained"#+",".join(str(f) for f in Id)
     msg.showinfo("info",res)
 
-
 def getImagesAndLabels(path):
     imagePaths=[os.path.join(path,f) for f in os.listdir(path)] 
-    #print(imagePaths)
-    
+    #print(imagePaths)   
     #create empth face list
     faces=[]
     #create empty ID list
@@ -80,7 +74,7 @@ def getImagesAndLabels(path):
     for imagePath in imagePaths:
         #loading the image and converting it to gray scale
         pilImage=Image.open(imagePath).convert('L')
-        w
+    
         #Now we are converting the PIL image into numpy array
         imageNp=np.array(pilImage,'uint8')
         #getting the Id from the image
@@ -89,11 +83,6 @@ def getImagesAndLabels(path):
         faces.append(imageNp)
         Ids.append(Id)        
     return faces,Ids
-
-
-
-def submit():
-    pass
 
 def clear():
     userent.delete(first=0,last=len(userent.get()))
@@ -108,7 +97,6 @@ def clear3():
     nament.delete(first=0,last=len(nament.get()))
     
 def track():
-    global attendance
     recognizer = cv2.face_LBPHFaceRecognizer.create()
     recognizer.read("TrainingImageLabel\Trainner.yml")
     harcascadePath = "haarcascade_frontalface_default.xml"
@@ -154,53 +142,57 @@ def track():
     cam.release()
     cv2.destroyAllWindows()
     print(attendance)
-    #res=attendance
-    #msg.showinfo("info",res)
+    att=attendance
+    display(att)
+    
+def display(att):
+    home=t.Tk()
+    home.title("ATTENDANCE")
+    home.geometry('500x250')
+    home.configure(bg='springgreen')
+    lab=t.Label(home,text=att,width=50,height=2,bg='snow')
+    lab.place(x=50,y=50)
+    
 def register():
     global rolent,nament,home
     home=t.Tk()
     home.title("REGISTRATION")
     home.geometry('700x500')
-    home.configure(bg='plum1')
-    roll=t.Label(home,text="ROLL NUMBER",width=15,height=2,bg='plum1',font='Arial 12')
-    name=t.Label(home,text="NAME",width=15,height=2,bg='plum1',font='Arial 12')
+    home.configure(bg='spring green')
+    roll=t.Label(home,text="ROLL NUMBER",width=15,height=1,bg='snow',font='Arial 12')
+    name=t.Label(home,text="NAME",width=15,height=1,bg='snow',font='Arial 12')
     rolent=t.Entry(home,width=20,font='Arial 16')
     nament=t.Entry(home,width=20,font='Arial 16')
-    clr2=t.Button(home,text="CLEAR",command=clear2,width=10,height=2,bg='plum1')
-    clr3=t.Button(home,text="CLEAR",command=clear3,width=10,height=2,bg='plum1')
-    #enr=t.Button(home,text="ENROLL FACE",command=enroll)
-    #enr.place(x=20,y=200)    
-    ver=t.Button(home,text="VERIFY",command=verify,width=10,height=2,bg='plum1')    
-    tra=t.Button(home,text="TRAIN FACES",command=train,width=10,height=2,bg='plum1')
-    #sub=t.Button(home,text="SUBMIT",command=submit)
-    roll.place(x=80,y=150)
-    name.place(x=80,y=200)
+    clr2=t.Button(home,text="CLEAR",command=clear2,width=10,height=2,bg='snow')
+    clr3=t.Button(home,text="CLEAR",command=clear3,width=10,height=2,bg='snow') 
+    ver=t.Button(home,text="VERIFY",command=verify,width=10,height=2,bg='snow')    
+    tra=t.Button(home,text="TRAIN FACES",command=train,width=10,height=2,bg='snow')
+    roll.place(x=70,y=150)
+    name.place(x=70,y=200)
     rolent.place(x=230,y=150)
     nament.place(x=230,y=200)
     clr2.place(x=510,y=150)
     clr3.place(x=510,y=200)
-    ver.place(x=330,y=320)
+    ver.place(x=100,y=320)
+    tra.place(x=350,y=320)
     
-    tra.place(x=230,y=320)
-    #sub.place(x=220,y=200)
 def attendance():
     home=t.Tk()
     home.title("ATTENDANCE")
-    home.geometry('700x500')
+    home.geometry('500x250')
+    home.configure(bg='turquoise1')
     tra=t.Button(home,text="TRACK ATTENDANCE",command=track)
-    tra.place(x=200,y=400)  
-    #lab=t.Button(home,text=att1)
-    #lab.place(x=100,y=100)
-
+    tra.place(x=180,y=140)  
+    
 def homescreen():
     home=t.Tk()
     home.title("HOME SCREEN")
     home.geometry('500x250')
-    home.configure(bg='pink')
+    home.configure(bg='cyan')
     reg=t.Button(home,text="REGISTER",command=register)
     att=t.Button(home,text="ATTENDANCE",command=attendance)
-    reg.place(x=120,y=75)
-    att.place(x=200,y=75)
+    reg.place(x=140,y=85)
+    att.place(x=230,y=85)
 
 def login1():
     global userent,pasent
@@ -208,8 +200,6 @@ def login1():
     p='123'
     if userent.get()==a:
         if pasent.get()==p:
-            #print('yes')
-           
             login.destroy()
             homescreen()
         else:
@@ -220,7 +210,6 @@ def login1():
         clear()
         clear1() 
         
-
 login=t.Tk()
 login.title("LOGIN")
 login.geometry('500x300')
@@ -240,5 +229,5 @@ pas.place(x=15,y=120)
 userent.place(x=180,y=70)
 pasent.place(x=180,y=120)
 sub.place(x=210,y=180)
-clg.place(x=-30,y=250)
+clg.place(x=0,y=250)
 login.mainloop()
